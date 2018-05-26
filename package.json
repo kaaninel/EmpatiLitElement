@@ -1,0 +1,22 @@
+{
+  "name": "empatielement",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "dependencies": {
+    "@polymer/lit-element": "^0.5.1",
+    "reflect-metadata": "^0.1.12"
+  },
+  "devDependencies": {
+    "@types/reflect-metadata": "^0.1.0",
+    "ts-loader": "^4.3.0",
+    "typescript": "^2.8.3",
+    "webpack": "^4.8.3",
+    "webpack-cli": "^2.1.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Necati Kaan Inel <kaaninel@gmail.com>",
+  "license": "MIT"
+}
