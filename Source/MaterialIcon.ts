@@ -1063,7 +1063,6 @@ export default class MaterialIcon extends EmpatiElement {
           font-family: 'Material Icons';
           font-weight: normal;
           font-style: normal;
-          font-size: var(--icon-size, 24px);
           line-height: 1;
           letter-spacing: normal;
           text-transform: none;

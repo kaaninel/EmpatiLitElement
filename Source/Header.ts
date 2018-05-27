@@ -1,6 +1,6 @@
 import MaterialIcon, { Icons } from "./MaterialIcon";
 import SideNav, { SideNavPosition } from "./SideNav";
-import { Color } from "./Style";
+import { Color, Shadow } from "./Style";
 import EmpatiElement, { CustomElement, html } from "./EmpatiElement";
 
 @CustomElement("empati-header")
@@ -21,14 +21,16 @@ export default class Header extends EmpatiElement {
           position: sticky;
           top: 0;
           display: flex;
+          z-index: 10;
 
-          font-size: 24px;
+          font-size: 40px;
           align-items: center;
+          box-shadow: ${Shadow.Dp3};
 
-          --icon-size: 40px;
         }
 
         #Logo {    
+          font-size: 24px;
           flex-grow: 1;
           text-align: center;
           padding:10px;

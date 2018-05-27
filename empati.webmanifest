@@ -1,0 +1,9 @@
+{
+  "short_name": "Empati",
+  "name": "EmpatiBlog",
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#0277bd"
+}

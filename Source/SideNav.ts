@@ -29,17 +29,21 @@ export default class SideNav extends EmpatiElement {
   @Check((E, New: number) => New >= 0 && New <= E.Size)
   Position = 0;
 
-  State = SideNavStates.Closed;
+  @Property State = SideNavStates.Closed;
 
   @Event("click", "Activator")
   Open() {
     this.State = SideNavStates.Open;
+    this.$.Nav.classList.add("Active");
+    this.$.BackDrop.classList.add("Active");
     this.Position = this.Size;
   }
 
   @Event("click", "BackDrop")
   Close() {
     this.State = SideNavStates.Closed;
+    this.$.Nav.classList.remove("Active");
+    this.$.BackDrop.classList.remove("Active");
     this.Position = 0;
   }
 
@@ -64,8 +68,14 @@ export default class SideNav extends EmpatiElement {
     else this.Open();
   }
 
-  Render({ Position, Size, BackdropMaxOpacity, Side, Icon }: Properties<this>) {
-    console.log(Icon);
+  Render({
+    Position,
+    Size,
+    BackdropMaxOpacity,
+    Side,
+    Icon,
+    State
+  }: Properties<this>) {
     return html`
     <style>
       :host{
@@ -112,6 +122,10 @@ export default class SideNav extends EmpatiElement {
 
       .Touch {
         transition: none !important;
+      }
+
+      .Active {
+        z-index: 10;
       }
     </style>
     <div id="BackDrop"></div>
