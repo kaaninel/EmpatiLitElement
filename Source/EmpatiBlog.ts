@@ -10,6 +10,19 @@ export default class EmpatiBlog extends EmpatiElement {
   }
 
   Render() {
-    return html`<empati-header></empati-header>`;
+    return html`
+    <style>
+      :host{
+        display: block;
+      }
+      #Container {
+        padding: 15px;
+      }
+    </style>
+    <empati-header></empati-header>
+    <main id="Container">
+      Test
+    </main>
+    `;
   }
 }

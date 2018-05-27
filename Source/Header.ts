@@ -1,5 +1,5 @@
-import MaterialIcon from "./MaterialIcon";
-import SideNav from "./SideNav";
+import MaterialIcon, { Icons } from "./MaterialIcon";
+import SideNav, { SideNavPosition } from "./SideNav";
 import { Color } from "./Style";
 import EmpatiElement, { CustomElement, html } from "./EmpatiElement";
 
@@ -14,7 +14,7 @@ export default class Header extends EmpatiElement {
       <style>
         :host {
           background-color: ${Color.Primary};
-          color: var(--primary-text-color);
+          color: ${Color.PrimaryText};
           height: 60px;
           box-sizing: border-box; 
           padding: 10px;
@@ -28,19 +28,22 @@ export default class Header extends EmpatiElement {
           --icon-size: 40px;
         }
 
-        #Account {
-          margin-left: auto;
-        }
-
         #Logo {    
           flex-grow: 1;
           text-align: center;
+          padding:10px;
+        }
+
+        #Nav {
+          flex-grow: 1;
         }
       </style>
-      <empati-sidenav>
+      <empati-sidenav id="Nav">
         <span id="Logo" slot="Logo">EmpatiLab</span>
+        <h1 slot="NavBar">Test</h1>
       </empati-sidenav>
-      <material-icon id="Account" icon="account_box"></material-icon>
+      <empati-sidenav Side=${SideNavPosition.Right} Icon=${Icons.AccountBox}>
+      </empati-sidenav>
     `;
   }
 }

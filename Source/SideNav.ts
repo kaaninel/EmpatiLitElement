@@ -13,10 +13,17 @@ enum SideNavStates {
   Swipe
 }
 
+export enum SideNavPosition {
+  Left = "left",
+  Right = "right"
+}
+
 @CustomElement("empati-sidenav")
 export default class SideNav extends EmpatiElement {
   @Property BackdropMaxOpacity = 0.6;
   @Property Size = window.innerWidth * 0.7;
+  @Property Side = SideNavPosition.Left;
+  @Property Icon = "menu";
 
   @Property
   @Check((E, New: number) => New >= 0 && New <= E.Size)
@@ -44,10 +51,10 @@ export default class SideNav extends EmpatiElement {
   }
 
   @Event("touchmove", "Nav", true)
-  Swipe(Event: TouchEvent) {
+  TouchMove(Event: TouchEvent) {
     const Diff = this.LastSwipeLoc - Event.changedTouches[0].clientX;
     this.LastSwipeLoc -= Diff;
-    this.Position -= Diff;
+    this.Position += this.Side == SideNavPosition.Left ? -Diff : Diff;
   }
 
   @Event("touchend", "Nav", true)
@@ -57,27 +64,28 @@ export default class SideNav extends EmpatiElement {
     else this.Open();
   }
 
-  Render({ Position, Size, BackdropMaxOpacity }: Properties<this>) {
+  Render({ Position, Size, BackdropMaxOpacity, Side, Icon }: Properties<this>) {
+    console.log(Icon);
     return html`
     <style>
       :host{
         display: flex;
         align-items: center;
-        flex-grow: 1;
       }
 
       #Nav {
         position: fixed;
         height: 100%;
         top: 0;
-        left: -${Size}px;
-        width: ${Size}px;
-        transform: translateX(${Position}px);
-        will-change: transform left;
+        ${Side}: -${Size}px;
+        width: ${Size + 15}px;
+        transform: translateX(${
+          this.Side == SideNavPosition.Left ? Position : -Position
+        }px);
+        will-change: transform;
         touch-action: pan-x;
         transition: .15s;
         
-        background:red;
       }
 
       #BackDrop {
@@ -89,21 +97,30 @@ export default class SideNav extends EmpatiElement {
         background-color: black;
         opacity: ${Position / Size * BackdropMaxOpacity};
         display: ${Position ? "block" : "none"};
-        will-change: opacity display;
+        will-change: opacity, display;
         transition: .15s;
+      }
+
+      #Content {
+        width: calc(100% - 15px);
+        background: white;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        ${Side}: 0;
       }
 
       .Touch {
         transition: none !important;
       }
-
-      #Activator {
-        margin-right: 10px;
-      }
     </style>
     <div id="BackDrop"></div>
-    <div id="Nav"></div>
-    <material-icon id="Activator" icon="menu"></material-icon>
+    <div id="Nav">
+      <div id="Content">
+        <slot name="NavBar"></slot>
+      </div>
+    </div>
+    <material-icon id="Activator" Icon$="${Icon}"></material-icon>
     <slot name="Logo"></slot>
     
     `;
