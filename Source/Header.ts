@@ -24,6 +24,7 @@ export default class Header extends EmpatiElement {
           z-index: 10;
 
           font-size: 40px;
+          
           align-items: center;
           box-shadow: ${Shadow.Dp3};
 

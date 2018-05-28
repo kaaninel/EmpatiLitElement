@@ -1,8 +1,25 @@
-import EmpatiElement, { html, CustomElement } from "./EmpatiElement";
+import EmpatiElement, {
+  html,
+  CustomElement,
+  Property,
+  Properties,
+  Event
+} from "./EmpatiElement";
 
 @CustomElement("empati-image")
 export default class Image extends EmpatiElement {
-  Render() {
+  @Property Source: string;
+
+  @Property Text: string;
+
+  @Event("click")
+  ChangeImage() {
+    this.Source = `https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-${Math.round(
+      Math.random() * 600000
+    )}.jpg`;
+  }
+
+  Render({ Text, Source }: Properties<this>) {
     return html`
     <style>
       :host{
@@ -10,9 +27,7 @@ export default class Image extends EmpatiElement {
       }
 
       div{
-        background-image: url("https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-${Math.round(
-          Math.random() * 600000
-        )}.jpg");
+        background-image: url(${Source});
         background-size: cover;
         width: 100%;
         padding-bottom: 56.25%;
@@ -34,7 +49,7 @@ export default class Image extends EmpatiElement {
     </style>
     <div>
       <span>
-        Officia excepteur veniam deserunt commodo aute.
+        ${Text}
       </span>
     </div>
     `;

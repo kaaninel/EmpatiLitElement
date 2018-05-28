@@ -1,7 +1,12 @@
 import "reflect-metadata";
 
 import Header from "./Header";
-import EmpatiElement, { CustomElement, html } from "./EmpatiElement";
+import EmpatiElement, {
+  CustomElement,
+  html,
+  Property,
+  Properties
+} from "./EmpatiElement";
 import { Shadow } from "./Style";
 import Image from "./Image";
 
@@ -11,7 +16,18 @@ export default class EmpatiBlog extends EmpatiElement {
     return [Header, Image];
   }
 
-  Render() {
+  @Property Images: Array<{ Image: string; Text: string }> = [];
+
+  constructor() {
+    super();
+    fetch("/Static/Posts.json")
+      .then(x => x.json())
+      .then(x => {
+        this.Images = x;
+      });
+  }
+
+  Render({ Images }: Properties<this>) {
     return html`
     <style>
       :host{
@@ -27,11 +43,10 @@ export default class EmpatiBlog extends EmpatiElement {
     </style>
     <empati-header></empati-header>
     <main id="Container">
-      <empati-image></empati-image>
-      <empati-image></empati-image>
-      <empati-image></empati-image>
-      <empati-image></empati-image>
-      <empati-image></empati-image>
+      ${Images.map(
+        x =>
+          html`<empati-image Source=${x.Image} Text=${x.Text}></empati-image>`
+      )}
     </main>
     `;
   }

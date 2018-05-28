@@ -6,6 +6,7 @@ import EmpatiElement, {
   Event,
   Check
 } from "./EmpatiElement";
+import { Icons } from "./MaterialIcon";
 
 enum SideNavStates {
   Open,
@@ -23,7 +24,7 @@ export default class SideNav extends EmpatiElement {
   @Property BackdropMaxOpacity = 0.6;
   @Property Size = window.innerWidth * 0.7;
   @Property Side = SideNavPosition.Left;
-  @Property Icon = "menu";
+  @Property Icon = Icons.Menu;
 
   @Property
   @Check((E, New: number) => New >= 0 && New <= E.Size)
