@@ -1,5 +1,5 @@
 module.exports = {
-  entry: './Source/EmpatiBlog.ts',
+  entry: './Source/Index.ts',
   module: {
     rules: [{
       test: /\.tsx?$/,
