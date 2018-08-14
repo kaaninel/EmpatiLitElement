@@ -1,8 +1,6 @@
 import EmpatiElement, { CustomElement, html, Event, Dispatch } from "EmpatiUI/EmpatiElement";
-import { Resizable } from "EmpatiUI/Mixins";
 
 @CustomElement("empati-index")
-@Resizable
 export default class EmpatiIndex extends EmpatiElement {
 
   ScrollTimeLock = 0;
