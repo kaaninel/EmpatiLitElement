@@ -10,10 +10,9 @@
       "dom"
     ] /* Specify library files to be included in the compilation. */,
     "outDir": "Dist" /* Redirect output structure to the directory. */,
-    "rootDir":
-      "Source" /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */,
+    "rootDir": "Source" /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */,
     "removeComments": true /* Do not emit comments to output. */,
-
+    "baseUrl": "./Source",
     /* Strict Type-Checking Options */
     "noImplicitAny": true /* Raise error on expressions and declarations with an implied 'any' type. */,
     "noImplicitThis": true /* Raise error on 'this' expressions with an implied 'any' type. */,

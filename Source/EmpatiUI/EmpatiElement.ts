@@ -100,16 +100,16 @@ export function Check<T>(Fn: (This: EmpatiElement, New: T, Old: T) => boolean) {
 
 export type Properties<T> = { [K in keyof T]: T[K] };
 
-interface LitHTMLElement extends LitElement {
-  new (): HTMLElement & LitElement,
-  prototype: HTMLElement & LitElement
+declare class LitHTMLElement extends LitElement {
+  new (): HTMLElement & LitElement;
+  prototype: HTMLElement & LitElement;
 }
 
 export function Dispatch(Name: string, Data?: any){
   window.dispatchEvent(new CustomEvent(Name, { detail: Data }));
 }
 
-export default abstract class EmpatiElement extends (<LitHTMLElement>LitElement) {
+export default class EmpatiElement extends (<typeof LitHTMLElement>LitElement) {
   _render(props: object) {
     return this.Render(props as Properties<this>);
   }
@@ -117,6 +117,18 @@ export default abstract class EmpatiElement extends (<LitHTMLElement>LitElement)
   $: Record<string, EmpatiElement> = {};
   Init = false;
   
+  __Events: Array<{
+    Name: string,
+    Target: string | any,
+    prop: string,
+    passive: boolean
+  }> = [];
+
+  __IEvents: Array<{
+    Name: string,
+    prop: string
+  }> = [];
+
   get Root(){
     //@ts-ignore
     return this._root as ShadowRoot;
@@ -125,6 +137,7 @@ export default abstract class EmpatiElement extends (<LitHTMLElement>LitElement)
   _shouldPropertyChange(Property: string, Value: any, OldValue: any) {
     const Super = super._shouldPropertyChange(Property, Value, OldValue);
     const Fn = `__${Property}CanChange`;
+    //@ts-ignore
     if (Super && Fn in this) return this[Fn](this, Value, OldValue);
     return Super;
   }
@@ -136,7 +149,6 @@ export default abstract class EmpatiElement extends (<LitHTMLElement>LitElement)
   }
 
   IsSlotFull(Slot: string) {
-    //@ts-ignore
     return !!Array.from(this.children).filter(x => x.getAttribute("slot") == Slot).length;
   }
 
@@ -147,30 +159,26 @@ export default abstract class EmpatiElement extends (<LitHTMLElement>LitElement)
   async _didRender(){
     if(!this.Init){
       this.Init = true;
-      //@ts-ignore
-      const Map: EmpatiElement[] = this._root.querySelectorAll("[id]");
+      const Map = Array.from(this.Root.querySelectorAll("[id]")) as EmpatiElement[];
       for (const Item of Map) this.$[Item.id] = Item;
       const Self = this;
       let Target;
-      if (this.Events){
-        if(this.SuperEvents) 
-          this.Events = this.Events.concat(this.SuperEvents);
-        for (const Ev of this.Events) {
-          if (Ev.Target)
-            if (Ev.Target.constructor === String) Target = this.$[Ev.Target];
-            else if (Ev.Target.constructor === Function) Target = Ev.Target(this);
-            else Target = Ev.Target;
-          else Target = this;
-          Target.addEventListener(
-            Ev.Name,
-            function(this: HTMLElement, Event: UIEvent) {
-              return Self[Ev.prop].call(Self, Event, this);
-            },
-            {
-              passive: Ev.passive
-            }
-          );
-        }
+      for (const Ev of this.__Events) {
+        if (Ev.Target)
+          if (Ev.Target.constructor === String) Target = this.$[Ev.Target];
+          else if (Ev.Target.constructor === Function) Target = Ev.Target(this);
+          else Target = Ev.Target;
+        else Target = this;
+        Target.addEventListener(
+          Ev.Name,
+          function(this: HTMLElement, Event: UIEvent) {
+            //@ts-ignore
+            return Self[(Ev.prop as string)].call(Self, Event, this);
+          },
+          {
+            passive: Ev.passive
+          }
+        );
       }
       if ("FirstRender" in this) this.FirstRender();
     }
@@ -183,12 +191,15 @@ export default abstract class EmpatiElement extends (<LitHTMLElement>LitElement)
 
   constructor(){
     super();
-    if(this.IEvents)
-      for(const Ev of this.IEvents)
-        IESTarget.addEventListener(Ev.Name, (Event: CustomEvent) => {
-          this[Ev.prop].call(this, Event.detail, Event);
-        });
+    for(const Ev of this.__IEvents)
+      IESTarget.addEventListener(Ev.Name, (Event: CustomEvent) => {
+        //@ts-ignore
+        this[Ev.prop].call(this, Event.detail, Event);
+      });
   }
 
-  abstract Render(Props: Properties<this>): TemplateResult;
+  Render?(Props: Properties<this>): TemplateResult;
+  Constr?(): void;
+  Rendered?(): void;
+  FirstRender?(): void;
 }

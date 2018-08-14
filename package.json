@@ -10,11 +10,13 @@
   "devDependencies": {
     "@types/reflect-metadata": "^0.1.0",
     "ts-loader": "^4.3.0",
+    "tsconfig-paths-webpack-plugin": "^3.1.3",
     "typescript": "^2.8.3",
     "webpack": "^4.8.3",
     "webpack-cli": "^2.1.4"
   },
   "scripts": {
+    "start": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Necati Kaan Inel <kaaninel@gmail.com>",
